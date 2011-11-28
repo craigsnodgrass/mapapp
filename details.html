@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Deets</title>
+      <link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.0b2.css" type="text/css" charset="utf-8" />
+	  <link rel="stylesheet" href="pgandjqm-style-override.css" type="text/css" charset="utf-8" />
+	  <script type="text/javascript" src="jquery.mobile/jquery-1.6.2.min"></script>
+	  <script type="text/javascript" charset="utf-8" src="phonegap-1.0.0.js"></script>
+	  <script src="jquery.mobile/jquery.mobile-1.0b2.js"></script>
+	  <script src="jquery.mobile/jqm.page.params.js"></script>
+	  <script type="text/javascript" charset="utf-8" src="main.js"></script>
+  
+	<!-- CDN Respositories: For production, replace lines above with these uncommented minified versions -->
+	<!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.css" />-->
+	<!-- <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>-->
+	<!-- <script src="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.js"></script>-->
+	<script type="text/javascript">
+$(document).ready(function(){
+alert('alert');
+$('#detailsPage').live('pageshow', function(event) {
+	var id = getUrlVars()["id"];
+$.getJSON('http://basecamp.blueridgeoutdoors.com/mobile-basecamp/Application/json.php?id='+id, displayEmployee);
+});
+
+function displayEmployee(data){
+	
+    $.each(data.markers1, function(index, value){
+    $('#listviewBrew').append('<li><a href="details.html?id=' + value.ID + '">' + value.post_title + '</a></li>').listview('refresh');
+    //details = '<p>'+ value.post_content + '</p>';
+    });
+});
+    });  
+</script>
+		</head>
+  <body onload="init();">
+<div data-role="page" id="detailsPage">
+   <div data-role="header">
+      <h1>Deets</h1>
+</div><!-- /header -->
+   <div data-role="content">
+    <ul id="listviewBrew" data-role="listview" data-inset="true"><li></li></ul>
+   <div id="detailsText">   
+      <p></p>
+   </div>   
+   </div><!-- /content -->
+   <div data-role="footer">
+   <h4>Page Footer</h4>
+</div><!-- /footer -->
+</div><!-- /page -->
+  </body>
+</html>

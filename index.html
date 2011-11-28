@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <!--<meta http-equiv="Content-type" content="text/html; charset=utf-8">-->
+    <title>Basecamp</title>
+      <link rel="stylesheet" href="jquery.mobile/jquery.mobile-1.0b2.css" type="text/css" charset="utf-8" />
+	  <link rel="stylesheet" href="pgandjqm-style-override.css" type="text/css" charset="utf-8" />
+	  <script type="text/javascript" src="jquery.mobile/jquery-1.6.2.min"></script>
+	  <script type="text/javascript" src="phonegap-1.0.0.js" charset="utf-8"></script>
+	  <!--<script src="http://documentcloud.github.com/underscore/underscore-min.js"></script>-->
+		<!--<script src="http://documentcloud.github.com/backbone/backbone-min.js"></script>-->
+		<script src="js/example.js"></script>
+	  <!--<script src="jquery.mobile/jqm.page.params.js"></script>-->
+	  <script type="text/javascript" charset="utf-8" src="main.js"></script>
+  
+	<!-- CDN Respositories: For production, replace lines above with these uncommented minified versions -->
+	<!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.css" />-->
+	<!-- <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>-->
+	<!-- <script src="http://code.jquery.com/mobile/1.0b2/jquery.mobile-1.0b2.min.js"></script>-->
+<script type="text/javascript">
+//make AJAX call to url
+/*$.fn.DetailsCard = function(){
+
+}*/
+
+$(document).ready(function(){
+$('a#Brews').click(function(){
+$.getJSON("http://basecamp.blueridgeoutdoors.com/mobile-basecamp/Application/json.php",
+function(data){
+    //var output = 'markers';
+    //var details;
+    $.each(data.markers1, function(index, value){
+    $('#listviewBrew').append('<li><a class="deets" href="#DetailsPage">' + value.post_title + '</a></li>').listview('refresh');
+    });
+    $.each(data.markers1,function(index, value){
+      $('#detailsText').append('<p>' + value.post_content + '</p>').content();
+   	});
+    });   
+    });
+    
+    //create markup
+var newPage = $("<div data-role=page data-url=yay><div data-role=header><h1>YAY!!!!</h1></div><div data-role=content><img src=http://bukk.it/yay.gif /></div></div");
+
+//append it to the page container
+newPage.appendTo( $.mobile.pageContainer );
+
+//go to it
+$('#button').click(function(){
+$.mobile.changePage(newPage);
+});
+    
+    $('a#Trail').click(function(){
+$.getJSON("http://basecamp.blueridgeoutdoors.com/mobile-basecamp/Application/trail.php",
+function(data){
+    var output = 'markers';
+    $.each(data.markers1, function(index, value){
+    output += '<li><a href="#Details">' + value.post_title + '</a></li>';
+        //output += '<p>' + value.post_content + '</p>';
+    });
+    $.each(data.markers1, function(index, value){
+    output += '<li><a href="#Details">' + value.post_title + '</a></li>';
+        //output += '<p>' + value.post_content + '</p>';
+    });
+    $('#listviewTrail').append(output).listview('refresh');
+    $('#details').append(output).listview('refresh');
+    });   
+    });
+
+});
+	</script>
+	</head>
+  <body onload="init();">
+<!-- Start of first page -->
+<div data-role="page" id="menu">
+   <div data-role="header">
+      <h1>Menu</h1>
+   </div><!-- /header -->
+	
+   <div data-role="content">
+ <div id="content"></div>
+      <p>Find your Adventure:</p>
+      <ul data-role="listview" data-inset="true" > 
+      <li><a id="Brews" href="#Brew" data-filter="true">Breweries & Wineries</a></li>
+      <li><a id="Trail" href="#Trails">Trails</a></li>
+      <li><a href="#River-Right">Rafting & Paddling</a></li>
+      <input type="submit" id="button" value="Submit" />
+      </ul>
+   </div><!-- /content -->
+   <div data-role="footer">
+      <div data-role="navbar">
+      <ul>
+         <li><a href="#Locations" class="ui-btn-active">Locations</a></li>
+         <li><a href="#Map">Map</a></li>
+      </ul>
+   </div><!-- /navbar -->
+   </div><!-- /footer -->
+</div><!-- /page -->
+<!-- Start of Map -->
+<div data-role="page" id="Map">
+   <div data-role="header">
+      <h1>Map</h1>
+   </div><!-- /header -->
+   <div data-role="content">   
+      <!--<ul id="listview" data-role="listview" data-inset="true"><li></li></ul>-->
+   </div><!-- /content -->
+   <div data-role="footer">
+      <h4>Page Footer</h4>
+   </div><!-- /footer -->
+</div><!-- /page -->
+<!-- Start of second page -->
+<div data-role="page" id="Brew">
+   <div data-role="header">
+      <h1>Breweries</h1>
+   </div><!-- /header -->
+   <div data-role="content">   
+      <ul id="listviewBrew" data-role="listview" data-inset="true"><li></li></ul>
+   </div><!-- /content -->
+   <div data-role="footer">
+      <h4>Page Footer</h4>
+   </div><!-- /footer -->
+</div><!-- /page -->
+<!-- Start of third page -->
+<div data-role="page" id="Trails">
+   <div data-role="header">
+      <h1>Trails</h1>
+   </div><!-- /header -->
+   <div data-role="content">   
+      <ul id="listviewTrail" data-role="listview" data-inset="true"><li></li></ul>
+   </div><!-- /content -->
+   <div data-role="footer">
+      <h4>Page Footer</h4>
+   </div><!-- /footer -->
+</div><!-- /page -->
+<!-- Start of fourth page -->
+<div data-role="page" id="River-Right">
+   <div data-role="header">
+      <h1>Planes</h1>
+</div><!-- /header -->
+   <div data-role="content">   
+      <p>We can add a list of planes</p>
+   </div><!-- /content -->
+   <div data-role="footer">
+   <h4>Page Footer</h4>
+</div><!-- /footer -->
+</div><!-- /page -->
+<!-- Start of fourth page -->
+<div data-role="page" id="DetailsPage">
+   <div data-role="header">
+      <h1>Deets</h1>
+</div><!-- /header -->
+   <div data-role="content">
+   <div id="detailsText">   
+      <p></p>
+   </div>   
+   </div><!-- /content -->
+   <div data-role="footer">
+   <h4>Page Footer</h4>
+</div><!-- /footer -->
+</div><!-- /page -->
+  </body>
+</html>
