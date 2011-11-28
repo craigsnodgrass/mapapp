@@ -1,38 +1,30 @@
-var deviceInfo = function() {
-    document.getElementById("platform").innerHTML = device.platform;
-    document.getElementById("version").innerHTML = device.version;
-    document.getElementById("uuid").innerHTML = device.uuid;
-    document.getElementById("name").innerHTML = device.name;
-    document.getElementById("width").innerHTML = screen.width;
-    document.getElementById("height").innerHTML = screen.height;
-    document.getElementById("colorDepth").innerHTML = screen.colorDepth;
-};
-
-var locationWatch = false;
-
-var toggleLocation = function() {
+var getLocation = function() {
     var suc = function(p) {
-        jQuery("#loctext").empty();
-                
-        var text = "<div class=\"locdata\">Latitude: " + p.coords.latitude
-                + "<br/>" + "Longitude: " + p.coords.longitude + "<br/>"
-                + "Accuracy: " + p.coords.accuracy + "m<br/>" + "</div>";
-        jQuery("#locdata").append(text);
+        
+        document.getElementById("loclat").innerHTML = 'Latitude: '
+                + p.coords.latitude;
+        document.getElementById("loclong").innerHTML = 'Longitude: '
+                + p.coords.longitude;
+        document.getElementById("locaccur").innerHTML = 'Accuracy: '
+                + p.coords.accuracy + 'm';
+
+        var mapview = document.getElementById('mapview');
 
         var image_url = "http://maps.google.com/maps/api/staticmap?sensor=false&center="
                 + p.coords.latitude
                 + ","
                 + p.coords.longitude
-                + "&zoom=13&size=280x175&markers=color:blue|"
+                + "&zoom=13&size=220x180&markers=color:blue|"
                 + p.coords.latitude + ',' + p.coords.longitude;
 
-        jQuery("#map").remove();
-        jQuery("#loccontainer").append(
-                jQuery(document.createElement("img")).attr("src", image_url)
-                        .attr('id', 'map'));
+        mapview.style.display = "";
+        mapview.style.position = "absolute";
+        mapview.style.bottom = "7px";
+        mapview.style.left = "14px";
+        document.getElementById("mapcanvas").src = image_url;
     };
     var fail = function(error) {
-        jQuery("#loctext").empty();
+        document.getElementById("loclong").innerHTML = '<span style="color:red;">Failed to get location</span>';
         switch (error.code) {
         case error.PERMISSION_DENIED:
             alert("User did not share geolocation data.");
@@ -52,22 +44,20 @@ var toggleLocation = function() {
         }
     };
 
-    if (locationWatch) {
-        locationWatch = false;
-        jQuery("#loctext").empty();
-        jQuery("#locdata").empty();
-        jQuery("#map").remove();
+    if (navigator.geolocation) {
+        document.getElementById("loclong").innerHTML = "Getting geolocation . . .";
+        navigator.geolocation.getCurrentPosition(suc, fail);
     } else {
-        if (navigator.geolocation) {
-            jQuery("#loctext").append("Getting geolocation . . .");
-            navigator.geolocation.getCurrentPosition(suc, fail);
-        } else {
-            jQuery("#loctext").empty();
-            jQuery("#loctext").append("Unable to get location.");
-            alert("Device or browser can not get location.");
-        }
-        locationWatch = true;
+        document.getElementById("loclong").innerHTML = '<span style="color:red;">Device or browser can not get location</span>';
     }
+};
+
+var closeLocation = function() {
+    document.getElementById("loclat").innerHTML = "";
+    document.getElementById("loclong").innerHTML = "";
+    document.getElementById("locaccur").innerHTML = "";
+    document.getElementById("mapcanvas").src = "";
+    document.getElementById("mapview").style.display = "none";
 };
 
 var beep = function() {
@@ -119,9 +109,9 @@ function dump_pic(data) {
     var viewport = document.getElementById('viewport');
     //console.log(data);
     viewport.style.display = "";
-    viewport.style.position = "absolute";
-    viewport.style.bottom = "160px";
-    viewport.style.left = "10px";
+    viewport.style.position = "relative";
+    viewport.style.top = "10px";
+    viewport.style.left = "20px";
     document.getElementById("test_img").src = "data:image/jpeg;base64," + data;
 }
 
@@ -135,20 +125,10 @@ function show_pic() {
     });
 }
 
-function close() {
+function closeviewport() {
     var viewport = document.getElementById('viewport');
-    viewport.style.position = "relative";
     viewport.style.display = "none";
-}
-
-// This is just to do this.
-function readFile() {
-    navigator.file.read('/sdcard/phonegap.txt', fail, fail);
-}
-
-function writeFile() {
-    navigator.file.write('foo.txt', "This is a test of writing to a file",
-            fail, fail);
+    document.getElementById("test_img").src = "";
 }
 
 function contacts_success(contacts) {
@@ -168,7 +148,7 @@ function get_contacts() {
             fail, obj);
 }
 
-function check_network() {
+var check_network = function() {
     var networkState = navigator.network.connection.type;
 
     var states = {};
@@ -179,25 +159,7 @@ function check_network() {
     states[Connection.CELL_3G]  = 'Cell 3G connection';
     states[Connection.CELL_4G]  = 'Cell 4G connection';
     states[Connection.NONE]     = 'No network connection';
-
-    confirm('Connection type:\n ' + states[networkState]);
-}
-
-function init() {
-    // the next line makes it impossible to see Contacts on the HTC Evo since it
-    // doesn't have a scroll button
-    // document.addEventListener("touchmove", preventBehavior, false);
-    document.addEventListener("deviceready", deviceInfo, true);
-
-    $("#accelmenu").live('expand', function() {
-        toggleAccel();
-    }).live('collapse', function() {
-        toggleAccel();
-    });
-
-    $("#locationmenu").live('expand', function() {
-        toggleLocation();
-    }).live('collapse', function() {
-        toggleLocation();
-    });
-}
+    
+    document.getElementById("networktext").innerHTML = "<span>Connection type:<br/>"
+        + states[networkState] + "</span>";
+};

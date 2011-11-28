@@ -1,0 +1,25 @@
+
+#confirmationmessage {
+	display:none;
+}
+.loading{
+    background:rgba(0, 0, 0, 0.3);
+    display:block;
+    width:10em;
+    height:10em;
+    position:absolute;top:50%;
+    left:50%;margin-left:-5em;
+    margin-top:-5em;
+    -webkit-border-radius:.5em;
+    color:#fff;text-shadow:#000 0 1px 1px;
+    text-align:center;padding-top:4em;font-weight:bold;
+    z-index:10000000000;
+}
+.x-map * {
+  -webkit-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+img.slide-show {
+	width:100%;
+}
