@@ -5,7 +5,7 @@
 
 
 //Enter the URI where the web app is located on your server
-var HTTP_ROOT = 'http://basecamp.blueridgeoutdoors.com/mobile-basecamp/Application';
+var HTTP_ROOT = 'url';
 
 //If you want to use a different source for the JSON data you can change it here
 var JSON_SOURCE = 'json.php';
